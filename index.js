@@ -7,8 +7,9 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
-const localPath =
-  "C:UsersWINDOW~1AppDataLocalTemplocalChromiumchromiumwin64-1253105chrome-winchrome.exe";
+const localPath = `C:/Users/WINDOW~1/AppData/Local/Temp/localChromium/chromium/win64-1253105/chrome-win/chrome.exe`;
+// const localPath = `C:\Users\WINDOW~1\AppData\Local\Temp\localChromium\chromium\win64-1253105\chrome-win\chrome.exe`;
+// "/Temp/localChromium/chromium/win64-1253105/chrome-win/chrome";
 
 app.get("/", (req, res) => {
   res.send("Server is running.");
@@ -16,7 +17,7 @@ app.get("/", (req, res) => {
 
 app.get("/scrape", async (req, res) => {
   try {
-    const browser = await puppeteer.launch({
+    /* const browser = await puppeteer.launch({
       args:
         process.env.NODE_ENV === "development"
           ? puppeteer.defaultArgs()
@@ -29,11 +30,21 @@ app.get("/scrape", async (req, res) => {
           : await chromium.executablePath(),
       headless:
         process.env.NODE_ENV === "development" ? false : chromium.headless,
+    }); */
+
+    const browser = await puppeteer.launch({
+      args: puppeteer.defaultArgs(),
+      defaultViewport: chromium.defaultViewport,
+      executablePath: localPath,
+      headless: chromium.headless,
     });
 
     const page = await browser.newPage();
 
-    await page.goto("https://www.example.com", { waitUntil: "networkidle0" });
+    // await page.goto("https://www.example.com", { waitUntil: "networkidle0" });
+    await page.goto("https://www.prothomalo.com/", {
+      waitUntil: "networkidle0",
+    });
 
     const pageTitle = await page.title();
 
@@ -45,7 +56,7 @@ app.get("/scrape", async (req, res) => {
     await browser.close();
   } catch (error) {
     res.send(`error: ${error.message}`);
-    console.error(error.message);
+    console.error(error);
   }
 });
 
