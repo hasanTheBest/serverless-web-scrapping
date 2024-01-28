@@ -7,6 +7,9 @@ const app = express();
 
 const PORT = process.env.PORT || 5000;
 
+const localPath =
+  "C:UsersWINDOW~1AppDataLocalTemplocalChromiumchromiumwin64-1253105chrome-winchrome.exe";
+
 app.get("/", (req, res) => {
   res.send("Server is running.");
 });
@@ -21,7 +24,8 @@ app.get("/scrape", async (req, res) => {
       defaultViewport: chromium.defaultViewport,
       executablePath:
         process.env.NODE_ENV === "development"
-          ? "/tmp/localChromium/chromium/linux-1122391/chrome-linux/chrome"
+          ? // ? "/tmp/localChromium/chromium/linux-1122391/chrome-linux/chrome"
+            localPath
           : await chromium.executablePath(),
       headless:
         process.env.NODE_ENV === "development" ? false : chromium.headless,
